@@ -19,7 +19,9 @@ class ButtonMainMenu extends StatelessWidget {
         height: 80.0,
         width: 200.0,
       ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.0)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14.0),
+      ),
       fillColor: Color(0xffFFC107),
     );
   }
