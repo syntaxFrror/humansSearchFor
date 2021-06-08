@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'constants.dart';
 
 class ButtonMainMenu extends StatelessWidget {
   final String buttonName;
@@ -11,7 +12,7 @@ class ButtonMainMenu extends StatelessWidget {
     return RawMaterialButton(
       child: Text(
         buttonName,
-        style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+        style: mainMenuButtonTextStyle,
       ),
       onPressed: onPressed,
       elevation: 10.0,
@@ -22,7 +23,7 @@ class ButtonMainMenu extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14.0),
       ),
-      fillColor: Color(0xffFFC107),
+      fillColor: mainMenuButtonColor,
     );
   }
 }

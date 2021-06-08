@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:things_humans_google/networking.dart';
+import 'package:things_humans_google/widgets/hidingAnswersWidget.dart';
+import 'package:things_humans_google/widgets/initialSearchWidget.dart';
+import 'package:things_humans_google/widgets/resultsWidget.dart';
+import 'package:things_humans_google/widgets/searchIconWidget.dart';
+import 'package:things_humans_google/constants.dart';
 
 class NewGame extends StatefulWidget {
   @override
@@ -9,7 +14,7 @@ class NewGame extends StatefulWidget {
 
 class _NewGameState extends State<NewGame> {
   List<dynamic> listOfCards;
-  bool isAnswersVisable = false;
+  bool isAnswerVisable = false;
   int cardNumber;
 
   @override
@@ -28,22 +33,21 @@ class _NewGameState extends State<NewGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: appBarColor,
+        title: Text(
+          'Things Humans Search For',
+          style: TextStyle(color: appBarTextColor),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
             cardNumber = Random().nextInt(listOfCards.length);
-            isAnswersVisable = false;
-            print(cardNumber);
+            isAnswerVisable = false;
           });
         },
         child: Icon(Icons.navigate_next),
-      ),
-      appBar: AppBar(
-        backgroundColor: Colors.red,
-        title: Text(
-          'Things Humans Search For',
-          style: TextStyle(color: Colors.white),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0.0),
@@ -51,7 +55,7 @@ class _NewGameState extends State<NewGame> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Material(
-              color: Colors.grey[400],
+              color: initialSearchColor,
               elevation: 5.0,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10.0),
@@ -59,83 +63,25 @@ class _NewGameState extends State<NewGame> {
               ),
               child: Row(
                 children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Text(
-                        listOfCards == null
-                            ? 'Loading...'
-                            : listOfCards[cardNumber]['search'],
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Color(0xff212121),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Material(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(10.0),
-                    ),
-                    color: Color(0xffFFC107),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Icon(
-                        Icons.search,
-                        size: 30.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
+                  InitialSearch(listOfCards, cardNumber),
+                  SearchIcon(),
                 ],
               ),
             ),
             Visibility(
-              visible: !isAnswersVisable,
-              child: FlatButton(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 70.0, bottom: 120.0),
-                  child: Text(
-                    'Press here to \nshow results...',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontStyle: FontStyle.italic,
-                      color: Color(0x55FFFFFF),
-                    ),
-                  ),
-                ),
+              visible: !isAnswerVisable,
+              child: TextButton(
+                child: HidingAnswersWidget(),
                 onPressed: () {
                   setState(() {
-                    isAnswersVisable = !isAnswersVisable;
+                    isAnswerVisable = !isAnswerVisable;
                   });
                 },
               ),
             ),
             Visibility(
-              visible: isAnswersVisable,
-              child: Material(
-                elevation: 5.0,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20.0),
-                  bottomRight: Radius.circular(20.0),
-                ),
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: listOfCards == null
-                          ? 0
-                          : listOfCards[cardNumber]['results']?.length,
-                      itemBuilder: (context, i) {
-                        return Text(
-                          listOfCards[cardNumber]['results'][i],
-                          style: TextStyle(color: Colors.black, fontSize: 20.0),
-                        );
-                      }),
-                ),
-              ),
+              visible: isAnswerVisable,
+              child: ResultsWidget(listOfCards, cardNumber),
             ),
           ],
         ),
